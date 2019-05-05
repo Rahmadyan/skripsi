@@ -33,11 +33,6 @@ for a in myresult:
         if t not in listStopword:
             wordsFiltered.append(t)
     print(wordsFiltered)
-# sql = "INSERT INTO preprocessing (content) VALUES (%s)"
-# mycursor.execute(sql, output)
-#
-# mydb.commit()
-#
-# print(mycursor.rowcount, "record inserted.")
+
 
 

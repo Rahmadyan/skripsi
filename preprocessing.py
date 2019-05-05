@@ -15,9 +15,8 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 mycursor.execute("SELECT content FROM news_tb")
 documents = mycursor.fetchall()
-#---Calculate term frequency --
 
-#First: tokenize words
+#token stem stop
 dictOfWords = {}
 
 for index, sentence in enumerate(documents):
@@ -37,16 +36,16 @@ for index, sentence in enumerate(documents):
     dictOfWords[index] = [(word,wordsFiltered.count(word)) for word in wordsFiltered]
 print(dictOfWords)
 
-# #second: remove duplicates
-# termFrequency = {}
+#Menghilangkan kata duplikat
+termFrequency = {}
 
-# for i in range(0, len(documents)):
-#     listOfNoDuplicates = []
-#     for wordFreq in dictOfWords[i]:
-#         if wordFreq not in listOfNoDuplicates:
-#             listOfNoDuplicates.append(wordFreq)
-#         termFrequency[i] = listOfNoDuplicates
-# print(termFrequency)
+for i in range(0, len(documents)):
+    listOfNoDuplicates = []
+    for wordFreq in dictOfWords[i]:
+        if wordFreq not in listOfNoDuplicates:
+            listOfNoDuplicates.append(wordFreq)
+        termFrequency[i] = listOfNoDuplicates
+print(termFrequency)
 #
 # #Third: normalized term frequency
 # normalizedTermFrequency = {}

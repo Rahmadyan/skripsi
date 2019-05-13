@@ -3,6 +3,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 import string
+import itertools
 import mysql.connector
 
 mydb = mysql.connector.connect(
@@ -14,18 +15,19 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 mycursor.execute("SELECT content FROM news_tb")
-documents = mycursor.fetchall()
-# for x in documents:
-#     print(x)
+x = mycursor.fetchall()
+documents = list(itertools.chain(*x))
+
+# documents = [list(x) for x in b]
+# print(documents)
 
 #1. tokenizing stopword dan stemming
 dictOfWords = {}
 
 for index, sentence in enumerate(documents):
-    for b in sentence:
-        b = b.translate(str.maketrans('', '', string.punctuation))
-
-    tokenizedWords = word_tokenize(b)
+    sentence = sentence.translate(str.maketrans('', '', string.punctuation))
+    # print(sentence)
+    tokenizedWords = word_tokenize(sentence)
 
     listStopword = set(stopwords.words('indonesian'))
 
@@ -70,10 +72,9 @@ for i in range(0, len(documents)):
 
 allDocuments = ''
 for sentence in documents:
-    for w in sentence:
-        allDocuments += w + ' '
-    allDocuments = allDocuments.translate(str.maketrans('', '', string.punctuation))
-    tokens = word_tokenize(allDocuments)
+    allDocuments += sentence + ' '
+allDocuments = allDocuments.translate(str.maketrans('', '', string.punctuation))
+tokens = word_tokenize(allDocuments)
 listStop = set(stopwords.words('indonesian'))
 
 stemm = StemmerFactory()
@@ -84,13 +85,49 @@ for t in tokens:
     if t not in listStop:
         wordsFilter.append(t)
 wordsFilter = [stemmer.stem(word) for word in wordsFilter]
-print(wordsFilter)
+# print(wordsFilter)
+
+allDocumentsNoDuplicate = []
+for word in wordsFilter:
+    if word not in allDocumentsNoDuplicate:
+        allDocumentsNoDuplicate.append(word)
+# print(allDocumentsNoDuplicate)
 
 
-#IKI PERCOBAAN JANGAN HIRAUKAN
-# for t in tokenizedWords:
-#     if t not in listStopword:
-#         allDocumentsNoDuplicates.append(t)
-# for w in allDocumentsNoDuplicates:
-#     print(w)
+#Menghitung jumlah dokumen dimana istilah/kata itu muncul
+
+jumlahDokumenDimanaKataMuncul = {}
+for index, voc in enumerate(allDocumentsNoDuplicate):
+    count = 0
+    for sentence in wordsFilter:
+        if voc in sentence:
+            count += 1
+    jumlahDokumenDimanaKataMuncul[index] = (voc, count)
+# print(jumlahDokumenDimanaKataMuncul)
+
+dictOFIDFNoDuplicates = {}
+
+
+for i in range(0, len(normalizedTermFrequency)):
+    listOfIDFCalcs = []
+    for word in normalizedTermFrequency[i]:
+        for x in range(0, len(jumlahDokumenDimanaKataMuncul)):
+            if word[0] == jumlahDokumenDimanaKataMuncul[x][0]:
+                listOfIDFCalcs.append((word[0],math.log(len(documents)/jumlahDokumenDimanaKataMuncul[x][1])))
+    dictOFIDFNoDuplicates[i] = listOfIDFCalcs
+
+#print(dictOFIDFNoDuplicates)
+
+#Multiply tf by idf for tf-idf
+
+dictOFTF_IDF = {}
+for i in range(0,len(normalizedTermFrequency)):
+    listOFTF_IDF = []
+    TFsentence = normalizedTermFrequency[i]
+    IDFsentence = dictOFIDFNoDuplicates[i]
+    for x in range(0, len(TFsentence)):
+        listOFTF_IDF.append((TFsentence[x][0],TFsentence[x][1]*IDFsentence[x][1]))
+    dictOFTF_IDF[i] = listOFTF_IDF
+
+print(dictOFTF_IDF)
 

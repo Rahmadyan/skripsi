@@ -68,7 +68,6 @@ for i in range(0, len(documents)):
 # print(normalizedTermFrequency)
 
 #4.IDF ngelu
-# RUMUS = log(n/df) n= jumlah dokumen df = jumlah dokumen dimana istilah/kata itu muncul
 
 allDocuments = ''
 for sentence in documents:
@@ -76,7 +75,6 @@ for sentence in documents:
 allDocuments = allDocuments.translate(str.maketrans('', '', string.punctuation))
 tokens = word_tokenize(allDocuments)
 listStop = set(stopwords.words('indonesian'))
-
 stemm = StemmerFactory()
 stemmer = stemm.create_stemmer()
 
@@ -94,7 +92,7 @@ for word in wordsFilter:
 # print(allDocumentsNoDuplicate)
 
 
-#Menghitung jumlah dokumen dimana istilah/kata itu muncul
+#Menghitung jumlah dokumen dimana istilah/kata itu muncul (DF)
 
 jumlahDokumenDimanaKataMuncul = {}
 for index, voc in enumerate(allDocumentsNoDuplicate):
@@ -105,18 +103,17 @@ for index, voc in enumerate(allDocumentsNoDuplicate):
     jumlahDokumenDimanaKataMuncul[index] = (voc, count)
 # print(jumlahDokumenDimanaKataMuncul)
 
+# IDF RUMUS = log(n/df) n= jumlah dokumen df = jumlah dokumen dimana istilah/kata itu muncul
 dictOFIDFNoDuplicates = {}
-
-
 for i in range(0, len(normalizedTermFrequency)):
     listOfIDFCalcs = []
     for word in normalizedTermFrequency[i]:
         for x in range(0, len(jumlahDokumenDimanaKataMuncul)):
             if word[0] == jumlahDokumenDimanaKataMuncul[x][0]:
-                listOfIDFCalcs.append((word[0],math.log(len(documents)/jumlahDokumenDimanaKataMuncul[x][1])))
+                listOfIDFCalcs.append((word[0],math.log10(len(documents)/jumlahDokumenDimanaKataMuncul[x][1])))
     dictOFIDFNoDuplicates[i] = listOfIDFCalcs
 
-#print(dictOFIDFNoDuplicates)
+# print(dictOFIDFNoDuplicates)
 
 #Multiply tf by idf for tf-idf
 
@@ -124,10 +121,67 @@ dictOFTF_IDF = {}
 for i in range(0,len(normalizedTermFrequency)):
     listOFTF_IDF = []
     TFsentence = normalizedTermFrequency[i]
+    # print(TFsentence)
     IDFsentence = dictOFIDFNoDuplicates[i]
+    # print(IDFsentence)
     for x in range(0, len(TFsentence)):
         listOFTF_IDF.append((TFsentence[x][0],TFsentence[x][1]*IDFsentence[x][1]))
     dictOFTF_IDF[i] = listOFTF_IDF
+    # dictOFTF_IDF = listOFTF_IDF
+# print(dictOFTF_IDF)
 
-print(dictOFTF_IDF)
+# print(math.log10(7/5))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # print(dictOFTF_IDF)
+# sql = """INSERT INTO preprocessing_tb (id, preprocessing, news_id) VALUES ('%s', '%s', '%s')"""
+      # "SELECT preprocessing_tb.id, preprocessing_tb.preprocessing, preprocessing_tb.news_id FROM news_tb, preprocessing_tb" \
+      # "WHERE preprocessing_tb.news_id = news_tb.id"
+# for a in range(0, len(dictOFTF_IDF)):
+#     print(a)
+    #     # mycursor.execute(sql, b)
+    #     print(b)
+    # mydb.commit()
+
+# for data in dictOFTF_IDF:
+#     columns = ', '.join("`" + str(x).replace('/', '_') + "`" for x in data.keys())
+#     values = ', '.join("'" + str(x).replace('/', '_') + "'" for x in data.values())
+    # columns = data.keys()
+    # values = data.values()
+# sql = "INSERT INTO preprocessing_tb (id, news_id, preprocessing) VALUES(%s, %s, %s,)"
+# mycursor.executemany(sql, dictOFTF_IDF.values())
+# mydb.commit()
+# mycursor.executemany(sql, dictOFTF_IDF)
+# mydb.commit()
+# from nltk.text import TextCollection
+#
+# mytexts = TextCollection(['universitas trunojoyo',
+#                           'komisi yudisial universitas jalin kerjasama berantas mafia adil',
+#                           'sar trunojoyo diklat bumi kemah wisata air terjun mojokerto bantu rektor',
+#                           'roadshow speedy trunojoyo seminar internet sehat cangkruk komunitas workshop lomba band',
+#                           'perintah kabupaten pamekasan henti program bantu beasiswa mahasiswa pamekasan universitas trunojoyo',
+#                           '11 staf universitas trunojoyo magang fakultas teknik industri uii',
+#                           'perpus universitas airlangga datang tamu 2 guru tinggi staf perpus universitas trunojoyo staf perpus universitas gunadarma'])
+#
+# print("NLTK tf_idf")
+# print(mytexts.tf_idf('komisi','komisi yudisial universitas jalin kerjasama berantas mafia adil'))
+
+# def test_tf(term, text):
+#     newText = text.split(' ')
+#     print(text.count(term))
+#     print(len(newText))
+#
+# test_tf('universitas','universitas trunojoyo')

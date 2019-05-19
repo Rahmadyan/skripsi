@@ -1,4 +1,9 @@
-#biar tidak bingung
+import math
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+import string
+import itertools
 import mysql.connector
 
 mydb = mysql.connector.connect(
@@ -8,33 +13,31 @@ mydb = mysql.connector.connect(
     database="news"
 )
 
+# mycursor = mydb.cursor(buffered=True)
 mycursor = mydb.cursor()
-mycursor.execute("SELECT title FROM news_tb")
-documents = mycursor.fetchall()
-for x in documents:
-    print(x)
+mycursor.execute("SELECT content FROM news_tb")
+myresult = mycursor.fetchall()
+# for a in myresult:
+#      print(a)
 
-# documents = ('the the universe has very many stars'),
-#             ('the galaxy contains many stars'),
-#             ('the cold breeze of winter made it very cold outside')
+for x in myresult:
+     for y in x:
+          kalimat = y.translate(str.maketrans('', '', string.punctuation))
 
-#TERM / KATA = 'the', 'universe' dll
-#SENTENCE / KALIMAT = 'the the universe has very many stars'
+          tokens = word_tokenize(kalimat)
+          listStopword = set(stopwords.words('indonesian'))
 
-allDocuments = ''
-for sentence in documents:
-    for x in sentence:
-        allDocuments += x + ' '
-allDocumentsTokenized = allDocuments.split(' ')
-print(allDocumentsTokenized)
+          factory = StemmerFactory()
+          stemmer = factory.create_stemmer()
 
-# dictOfWords = {}
-#
-# for index, sentence in enumerate(documents):
-#     tokenizedWords = sentence.split(' ')
-#     dictOfWords[index] = [(word,tokenizedWords.count(word)) for word in tokenizedWords]
-#
-# print(dictOfWords)
-
-# mylist = list(documents)
-# print(mylist)
+          wordsFilterd = []
+          for t in tokens:
+               if t not in listStopword:
+                    wordsFilterd.append(t)
+          wordsFilterd = [stemmer.stem(word) for word in wordsFilterd]
+          wordsFilterd = tuple(wordsFilterd)
+     # print(wordsFilterd)
+     # break
+     # wordsFilterd = ' '.join(wordsFilterd)
+     print(wordsFilterd)
+     sql = "INSERT INTO `preprocessing_tb` (`id`, `preprocessing`, `news_id`) VALUES (NULL, 'kokojjij', '252');"

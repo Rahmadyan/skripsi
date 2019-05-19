@@ -15,23 +15,28 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 mycursor.execute("SELECT content FROM news_tb")
 myresult = mycursor.fetchall()
+# for x in myresult:
+#     print(x)
+
 for a in myresult:
     for b in a:
-        factory = StemmerFactory()
-        stemmer = factory.create_stemmer()
-        output = stemmer.stem(b)
-        output = output.translate(str.maketrans('', '', string.punctuation)).lower()
-    tokens = word_tokenize(output)
+        b = b.translate(str.maketrans('', '', string.punctuation))
+
+    tokens = word_tokenize(b)
 
     listStopword = set(stopwords.words('indonesian'))
 
-    #stem
     factory = StemmerFactory()
     stemmer = factory.create_stemmer()
+
     wordsFiltered = []
     for t in tokens:
         if t not in listStopword:
             wordsFiltered.append(t)
+    # for w in wordsFiltered:
+    #     # katadasar = stemmer.stem(kalimat)
+    #     []
+    wordsFiltered = [stemmer.stem(word) for word in wordsFiltered]
     print(wordsFiltered)
 
 

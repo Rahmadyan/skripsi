@@ -16,7 +16,10 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 mycursor.execute("SELECT content FROM news_tb")
 x = mycursor.fetchall()
+# print(x)
+# print(x)
 documents = list(itertools.chain(*x))
+# print(documents)
 
 # documents = [list(x) for x in b]
 # print(documents)
@@ -40,11 +43,11 @@ for index, sentence in enumerate(documents):
             wordsFiltered.append(t)
     wordsFiltered = [stemmer.stem(word) for word in wordsFiltered]
     dictOfWords[index] = [(word,wordsFiltered.count(word)) for word in wordsFiltered]
-# print(dictOfWords)
+# print(wordsFiltered)
+
 
 #2. Menghilangkan kata duplikat
 termFrequency = {}
-
 for i in range(0, len(documents)):
     listOfNoDuplicates = []
     for wordFreq in dictOfWords[i]:
@@ -65,7 +68,7 @@ for i in range(0, len(documents)):
         normalizedFreq = wordFreq[1]/lenOfSentence #pembagain kemunculan kata dengan jumlah kata dalam kalimat
         listOfNormalized.append((wordFreq[0],normalizedFreq))
     normalizedTermFrequency[i] = listOfNormalized
-# print(normalizedTermFrequency)
+print(normalizedTermFrequency)
 
 #4.IDF ngelu
 
@@ -73,6 +76,8 @@ allDocuments = ''
 for sentence in documents:
     allDocuments += sentence + ' '
 allDocuments = allDocuments.translate(str.maketrans('', '', string.punctuation))
+
+# print(allDocuments)
 tokens = word_tokenize(allDocuments)
 listStop = set(stopwords.words('indonesian'))
 stemm = StemmerFactory()
@@ -113,7 +118,7 @@ for i in range(0, len(normalizedTermFrequency)):
                 listOfIDFCalcs.append((word[0],math.log10(len(documents)/jumlahDokumenDimanaKataMuncul[x][1])))
     dictOFIDFNoDuplicates[i] = listOfIDFCalcs
 
-# print(dictOFIDFNoDuplicates)
+print(dictOFIDFNoDuplicates)
 
 #Multiply tf by idf for tf-idf
 

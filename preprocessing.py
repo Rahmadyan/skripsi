@@ -42,8 +42,9 @@ for index, sentence in enumerate(documents):
         if t not in listStopword:
             wordsFiltered.append(t)
     wordsFiltered = [stemmer.stem(word) for word in wordsFiltered]
+    # print(wordsFiltered)
     dictOfWords[index] = [(word,wordsFiltered.count(word)) for word in wordsFiltered]
-# print(wordsFiltered)
+print(dictOfWords)
 
 
 #2. Menghilangkan kata duplikat
@@ -54,7 +55,7 @@ for i in range(0, len(documents)):
         if wordFreq not in listOfNoDuplicates:
             listOfNoDuplicates.append(wordFreq)
         termFrequency[i] = listOfNoDuplicates
-# print(termFrequency)
+print(termFrequency)
 
 #3. Normalisasi TF
 #Kemunculan kata/istilah(t) dalam kalimat / jumlah kata dalam dokumen/kalimat(d)
@@ -68,7 +69,7 @@ for i in range(0, len(documents)):
         normalizedFreq = wordFreq[1]/lenOfSentence #pembagain kemunculan kata dengan jumlah kata dalam kalimat
         listOfNormalized.append((wordFreq[0],normalizedFreq))
     normalizedTermFrequency[i] = listOfNormalized
-print(normalizedTermFrequency)
+# print(normalizedTermFrequency)
 
 #4.IDF ngelu
 
@@ -76,8 +77,8 @@ allDocuments = ''
 for sentence in documents:
     allDocuments += sentence + ' '
 allDocuments = allDocuments.translate(str.maketrans('', '', string.punctuation))
-
 # print(allDocuments)
+
 tokens = word_tokenize(allDocuments)
 listStop = set(stopwords.words('indonesian'))
 stemm = StemmerFactory()
@@ -118,7 +119,7 @@ for i in range(0, len(normalizedTermFrequency)):
                 listOfIDFCalcs.append((word[0],math.log10(len(documents)/jumlahDokumenDimanaKataMuncul[x][1])))
     dictOFIDFNoDuplicates[i] = listOfIDFCalcs
 
-print(dictOFIDFNoDuplicates)
+# print(dictOFIDFNoDuplicates)
 
 #Multiply tf by idf for tf-idf
 

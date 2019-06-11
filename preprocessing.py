@@ -28,6 +28,7 @@ documents = list(itertools.chain(*x))
 dictOfWords = {}
 
 for index, sentence in enumerate(documents):
+
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
     # print(sentence)
     tokenizedWords = word_tokenize(sentence)
@@ -44,8 +45,7 @@ for index, sentence in enumerate(documents):
     wordsFiltered = [stemmer.stem(word) for word in wordsFiltered]
     # print(wordsFiltered)
     dictOfWords[index] = [(word,wordsFiltered.count(word)) for word in wordsFiltered]
-print(dictOfWords)
-
+# print(dictOfWords)
 
 #2. Menghilangkan kata duplikat
 termFrequency = {}
@@ -56,6 +56,8 @@ for i in range(0, len(documents)):
             listOfNoDuplicates.append(wordFreq)
         termFrequency[i] = listOfNoDuplicates
 print(termFrequency)
+x = termFrequency.keys()
+print(x)
 
 #3. Normalisasi TF
 #Kemunculan kata/istilah(t) dalam kalimat / jumlah kata dalam dokumen/kalimat(d)

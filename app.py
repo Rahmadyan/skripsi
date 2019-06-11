@@ -46,6 +46,11 @@ def articles():
     # Close connection
     cur.close()
 
+def get_title_from_index(index):
+    return articles[articles.index == index]["title"].values[0]
+def get_index_from_title(title):
+    return articles[articles.title == title]["index"].values[0]
+
 #Buka Artikel
 @app.route('/article/<string:id>/')
 def article(id):
@@ -56,7 +61,7 @@ def article(id):
     result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
 
     article = cur.fetchone()
-    print(article)
+    # print(article)
     return render_template('article.html', article=article)
 
 #Class Registrasi USER

@@ -16,7 +16,7 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 mycursor.execute("SELECT content FROM news_tb")
 x = mycursor.fetchall()
-# print(x)
+print(x)
 # print(x)
 documents = list(itertools.chain(*x))
 # print(documents)
@@ -55,9 +55,9 @@ for i in range(0, len(documents)):
         if wordFreq not in listOfNoDuplicates:
             listOfNoDuplicates.append(wordFreq)
         termFrequency[i] = listOfNoDuplicates
-print(termFrequency)
+# print(termFrequency)
 x = termFrequency.keys()
-print(x)
+# print(x)
 
 #3. Normalisasi TF
 #Kemunculan kata/istilah(t) dalam kalimat / jumlah kata dalam dokumen/kalimat(d)
@@ -109,13 +109,14 @@ for index, voc in enumerate(allDocumentsNoDuplicate):
         if voc in sentence:
             count += 1
     jumlahDokumenDimanaKataMuncul[index] = (voc, count)
-# print(jumlahDokumenDimanaKataMuncul)
+print(jumlahDokumenDimanaKataMuncul)
 
 # IDF RUMUS = log(n/df) n= jumlah dokumen df = jumlah dokumen dimana istilah/kata itu muncul
 dictOFIDFNoDuplicates = {}
 for i in range(0, len(normalizedTermFrequency)):
     listOfIDFCalcs = []
     for word in normalizedTermFrequency[i]:
+        print(word[0])
         for x in range(0, len(jumlahDokumenDimanaKataMuncul)):
             if word[0] == jumlahDokumenDimanaKataMuncul[x][0]:
                 listOfIDFCalcs.append((word[0],math.log10(len(documents)/jumlahDokumenDimanaKataMuncul[x][1])))

@@ -46,7 +46,6 @@ for index, sentence in enumerate(documents):
     dictOfWords[index] = [word for word in wordsFiltered]
 # print(dictOfWords)
 
-
 #2. Menghilangkan kata duplikat
 termFrequency = []
 for i in range(0, len(documents)):
@@ -87,7 +86,7 @@ def tfidf(documents):
     # tokenized_documents = [tokenize(d) for d in documents]
     # print(documents)
     idf = inverse_document_frequencies(documents)
-    # print(idf)
+    # print(idf.keys())
     tfidf_documents = []
     for document in documents:
         doc_tfidf = []
@@ -109,20 +108,27 @@ def cosine_similarity(vector1, vector2):
 # tokenize = lambda doc: doc.lower().split(" ")
 # sklearn_tfidf = TfidfVectorizer(norm='l2',min_df=0, use_idf=True, smooth_idf=False, sublinear_tf=True, tokenizer=tokenize)
 # sklearn_representation = sklearn_tfidf.fit_transform(termFrequency)
+def hasil():
+    tfidf_representation = tfidf(termFrequency)
+    our_tfidf_comparisons = []
+    for count_0, doc_0 in enumerate(tfidf_representation):
+        for count_1, doc_1 in enumerate(tfidf_representation):
+            our_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
+    # print(termFrequency)
+    # print(our_tfidf_comparisons)
+    return our_tfidf_comparisons
 
-tfidf_representation = tfidf(termFrequency)
-our_tfidf_comparisons = []
-for count_0, doc_0 in enumerate(tfidf_representation):
-    # print(doc_0)
-    for count_1, doc_1 in enumerate(tfidf_representation):
-        our_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0))
-print(our_tfidf_comparisons)
+# print(hasil())
+# print(termFrequency)
+# for element in our_tfidf_comparisons:
+#     print(element)
 
-
-# skl_tfidf_comparisons = []
-# for count_0, doc_0 in enumerate(sklearn_representation.toarray()):
-#     for count_1, doc_1 in enumerate(sklearn_representation.toarray()):
-#         skl_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
+# i=0
+# for element in our_tfidf_comparisons:
+#     print(element[0])
+#     i=i+1
+#     if i>5:
+#         break
 
 # for x in zip(sorted(our_tfidf_comparisons, reverse = True), sorted(skl_tfidf_comparisons, reverse = True)):
 #     print(x)

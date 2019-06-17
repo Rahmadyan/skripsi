@@ -4,6 +4,8 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+from test import hasil
+import mysql.connector
 
 app = Flask(__name__)
 
@@ -21,6 +23,7 @@ Articles = Articles()
 
 @app.route('/')
 def index():
+    # print(hasil())
     return render_template('home.html')
 
 @app.route('/about')
@@ -46,11 +49,6 @@ def articles():
     # Close connection
     cur.close()
 
-def get_title_from_index(index):
-    return articles[articles.index == index]["title"].values[0]
-def get_index_from_title(title):
-    return articles[articles.title == title]["index"].values[0]
-
 #Buka Artikel
 @app.route('/article/<string:id>/')
 def article(id):
@@ -61,7 +59,7 @@ def article(id):
     result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
 
     article = cur.fetchone()
-    # print(article)
+
     return render_template('article.html', article=article)
 
 #Class Registrasi USER

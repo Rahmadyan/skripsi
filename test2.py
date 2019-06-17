@@ -7,14 +7,21 @@ import itertools
 import mysql.connector
 tokenize = lambda doc: doc.lower().split(" ")
 
+# document_0 = "universitas trunojoyo"
+# document_1 = "komisi yudisial universitas jalin kerjasama berantas mafia adil"
+# document_2 = "sar trunojoyo ada diklat bumi kemah wisata air terjun mojokerto acara buka langsung bantu rektor"
+# document_3 = "roadshow speedy trunojoyo isi acara seminar internet sehat cangkrukan komunitas workshop lomba band"
+# document_4 = "perintah kabupaten pamekasan henti program bantu pamekasan beasiswa mahasiswa kuliah universitas trunojoyo"
+# document_5 = "banyak 11 orang staf universitas trunojoyo magang fakultas teknik industri uii"
+# document_6 = "perpus universitas airlangga datang tamu 2 guru tinggi staf perpus universitas trunojoyo staf perpus universitas gunadarma"
+# document_7 = "kalimat double test"
 document_0 = "universitas trunojoyo"
 document_1 = "komisi yudisial universitas jalin kerjasama berantas mafia adil"
-document_2 = "sar trunojoyo ada diklat bumi kemah wisata air terjun mojokerto acara buka langsung bantu rektor"
-document_3 = "roadshow speedy trunojoyo isi acara seminar internet sehat cangkrukan komunitas workshop lomba band"
-document_4 = "perintah kabupaten pamekasan henti program bantu pamekasan beasiswa mahasiswa kuliah universitas trunojoyo"
-document_5 = "banyak 11 orang staf universitas trunojoyo magang fakultas teknik industri uii"
-document_6 = "perpus universitas airlangga datang tamu 2 guru tinggi staf perpus universitas trunojoyo staf perpus universitas gunadarma"
-# document_7 = "kalimat double test"
+document_2 = "sar trunojoyo diklat bumi kemah wisata air terjun mojokerto bantu rektor"
+document_3 = "roadshow speedy trunojoyo seminar internet sehat cangkruk komunitas workshop lomba band"
+document_4 = "perintah kabupaten pamekasan henti program bantu beasiswa mahasiswa pamekasan universitas trunojoyo"
+document_5 = "11 staf universitas trunojoyo magang fakultas teknik industri uii"
+document_6 = "perpus datang tamu 2 guru tinggi staf perpus trunojoyo staf perpus universitas gunadarma"
 all_documents = [document_0, document_1, document_2, document_3, document_4, document_5, document_6]
 
 # print(all_documents)
@@ -51,7 +58,7 @@ def tfidf(documents):
     tokenized_documents = [tokenize(d) for d in documents]
     # print(tokenized_documents)
     idf = inverse_document_frequencies(tokenized_documents)
-    # print(idf)
+    print(idf.keys())
     tfidf_documents = []
     for document in tokenized_documents:
         doc_tfidf = []
@@ -90,7 +97,9 @@ for count_0, doc_0 in enumerate(sklearn_representation.toarray()):
     for count_1, doc_1 in enumerate(sklearn_representation.toarray()):
         skl_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
 
-for x in zip(sorted(our_tfidf_comparisons, reverse = True), sorted(skl_tfidf_comparisons, reverse = True)):
+# for x in zip(sorted(our_tfidf_comparisons, reverse = True), sorted(skl_tfidf_comparisons, reverse = True)):
+    # print (x)
+for x in zip(our_tfidf_comparisons,skl_tfidf_comparisons):
     print (x)
 
 # print(tfidf_representation)

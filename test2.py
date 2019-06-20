@@ -58,7 +58,7 @@ def tfidf(documents):
     tokenized_documents = [tokenize(d) for d in documents]
     # print(tokenized_documents)
     idf = inverse_document_frequencies(tokenized_documents)
-    print(idf.keys())
+    # print(idf.keys())
     tfidf_documents = []
     for document in tokenized_documents:
         doc_tfidf = []
@@ -99,8 +99,8 @@ for count_0, doc_0 in enumerate(sklearn_representation.toarray()):
 
 # for x in zip(sorted(our_tfidf_comparisons, reverse = True), sorted(skl_tfidf_comparisons, reverse = True)):
     # print (x)
-for x in zip(our_tfidf_comparisons,skl_tfidf_comparisons):
-    print (x)
+# for x in zip(our_tfidf_comparisons,skl_tfidf_comparisons):
+    # print (x)
 
 # print(tfidf_representation)
 # print(our_tfidf_comparisons)

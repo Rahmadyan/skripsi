@@ -16,13 +16,8 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 mycursor.execute("SELECT content FROM news_tb")
 x = mycursor.fetchall()
-# print(x)
-# print(x)
-documents = list(itertools.chain(*x))
-# print(documents)
 
-# documents = [list(x) for x in b]
-# print(documents)
+documents = list(itertools.chain(*x))
 
 #1. tokenizing stopword dan stemming
 dictOfWords = {}
@@ -103,11 +98,6 @@ def cosine_similarity(vector1, vector2):
         return 0
     return dot_product/magnitude
 
-# Perbedaan pada library scikit lern
-# from sklearn.feature_extraction.text import TfidfVectorizer
-# tokenize = lambda doc: doc.lower().split(" ")
-# sklearn_tfidf = TfidfVectorizer(norm='l2',min_df=0, use_idf=True, smooth_idf=False, sublinear_tf=True, tokenizer=tokenize)
-# sklearn_representation = sklearn_tfidf.fit_transform(termFrequency)
 def hasil():
     tfidf_representation = tfidf(termFrequency)
     our_tfidf_comparisons = []
@@ -118,17 +108,4 @@ def hasil():
     # print(our_tfidf_comparisons)
     return our_tfidf_comparisons
 
-# print(hasil())
-# print(termFrequency)
-# for element in our_tfidf_comparisons:
-#     print(element)
-
-# i=0
-# for element in our_tfidf_comparisons:
-#     print(element[0])
-#     i=i+1
-#     if i>5:
-#         break
-
-# for x in zip(sorted(our_tfidf_comparisons, reverse = True), sorted(skl_tfidf_comparisons, reverse = True)):
-#     print(x)
+print(hasil())

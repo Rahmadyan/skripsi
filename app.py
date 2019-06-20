@@ -58,7 +58,7 @@ def article(id):
     # Get article
     result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
 
-    article = cur.fetchone()
+    # article = cur.fetchone()
 
     return render_template('article.html', article=article)
 

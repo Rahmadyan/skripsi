@@ -92,20 +92,12 @@ for i in articles:
 print(hasil)
 
 mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM news_tb")
-articles = mycursor.fetchall()
-# print(articles)
-# for i in articles:
-    # print(i)
-    # b = 0
-    # for x in hasil[0]:
-    #     if i[0] == x:
-            # b += 1
-            # print(i)
-    # for x in hasil:
-    #     print(x)
 
 
-
+mycursor.execute("SELECT * FROM news_tb where id IN ({})".format(",".join([str(i) for i in hasil])))
+myresult = mycursor.fetchall()
+print(myresult)
+results = sorted(myresult, key=lambda x: hasil.index(x[0]))
+print(results)
 
 

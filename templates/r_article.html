@@ -1,0 +1,21 @@
+{% extends 'article.html'%}
+
+{% block rbody %}
+<ul class="list-group">
+    {% for a in articles %}
+        <!--<li class="list-group-item">-->
+            <!--<a href="article/{{article.id}}"> {{article.title}}</a></li>-->
+        <!--</ul>-->
+        <div class="media position-relative">
+          <img src="{{a.imagelink}}" width="180" height="140" class="mr-3" alt="...">
+          <div class="media-body">
+              <small>{{a.time}}</small>
+            <h5 class="mt-0">{{a.title}}</h5>
+            <p>{{a.content | truncate(140) | safe}}</p>
+            <a href="{{a.id}}" class="stretched-link">Go somewhere</a>
+          </div>
+        </div>
+        <br>
+    {%endfor%}
+    </ul>
+{% endblock %}

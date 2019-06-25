@@ -4,7 +4,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
-from test import hasil
+from test import hasil, sorting_hasil
 import mysql.connector
 
 app = Flask(__name__)
@@ -40,7 +40,12 @@ def articles():
     result = cur.execute("SELECT * FROM news_tb")
 
     articles = cur.fetchall()
-
+    # for i in range(0, len(articles)):
+    #     for word in articles[i]:
+    #         # print(word)
+    #         print([word]['content'])
+            # print(str(word[0]['id']))
+        # print(i)
     if result > 0:
         return render_template('articles.html', articles=articles)
     else:
@@ -49,18 +54,44 @@ def articles():
     # Close connection
     cur.close()
 
+
+
+
+    # ambil id yang sesuai dengan id pembanding di tabel
 #Buka Artikel
 @app.route('/article/<string:id>/')
 def article(id):
     # Create cursor
     cur = mysql.connection.cursor()
-
     # Get article
     result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
+    article = cur.fetchone()
 
-    # article = cur.fetchone()
+    sorting_hasil()
+    hasil_sorting = sorting_hasil()
+    hasil()
+    real_id = hasil()
 
-    return render_template('article.html', article=article)
+    list_id_real_id = []
+    for i in enumerate(real_id):
+        list_id_real_id.append(i)
+    print(list_id_real_id)
+    # parsing id artikel dan tetntukan urutan dari id tersebut berapa?
+    # masukan urutan id ke dalam sql
+    # terakhir panggil
+    # for i in list_id_real_id:
+    #     for x in range(o, len(hasil_sorting)):
+    #         if
+    #     print(i[0])
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT * FROM news_tb")
+    articles = cur.fetchall()
+    print(articles)
+    # result = cur.execute("SELECT * FROM result_tb WHERE id_query = %s", [id])
+    # a=cur.fetchall()
+    # a = str(a[0]['content'])
+
+    return render_template('article.html', article=article, articles = articles)
 
 #Class Registrasi USER
 class RegisterForm(Form):

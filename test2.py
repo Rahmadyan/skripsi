@@ -24,7 +24,7 @@ document_5 = "11 staf universitas trunojoyo magang fakultas teknik industri uii"
 document_6 = "perpus datang tamu 2 guru tinggi staf perpus trunojoyo staf perpus universitas gunadarma"
 all_documents = [document_0, document_1, document_2, document_3, document_4, document_5, document_6]
 
-# print(all_documents)
+print(all_documents)
 
 #TF hitung kemunculan kata (tf murni) dalam kalimat
 def term_frequency(term, tokenized_document):

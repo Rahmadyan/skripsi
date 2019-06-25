@@ -21,6 +21,8 @@ x = mycursor.fetchall()
 documents = list(itertools.chain(*x))
 # print(documents)
 
+
+
 # documents = [list(x) for x in b]
 # print(documents)
 
@@ -44,3 +46,66 @@ for index, sentence in enumerate(documents):
     wordsFiltered = [stemmer.stem(word) for word in wordsFiltered]
     # print(wordsFiltered)
     # dictOfWords[index] = [word for word in wordsFiltered]
+
+mycursor.execute("SELECT * FROM news_tb")
+a = mycursor.fetchall()
+# print(a)
+
+# b = []
+# for i in range(0, len(a)):
+#     for c in a[i]:
+#         print(c)
+
+
+
+
+
+mycursor = mydb.cursor()
+mycursor.execute("SELECT id FROM news_tb")
+a = mycursor.fetchall()
+list_id = list(itertools.chain(*a))
+list_id_real_id = []
+for i in enumerate(list_id):
+    list_id_real_id.append(i)
+print("Ini adalah data real id dan id dokumen")
+print(list_id_real_id)
+
+id = 339
+print(id)
+hasil_deteksi = []
+for i in list_id_real_id:
+    if i[1] == id:
+        hasil_deteksi.append(i[0])
+hasil_deteksi = " ".join(str(x) for x in hasil_deteksi)
+print(hasil_deteksi)
+
+mycursor = mydb.cursor()
+mycursor.execute("SELECT * FROM `result_tb` WHERE id_query = %s", [hasil_deteksi])
+articles = mycursor.fetchall()
+print(articles)
+
+hasil = []
+for i in articles:
+    for x in list_id_real_id:
+        if i[2] == x[0]:
+            hasil.append(x[1])
+print(hasil)
+
+mycursor = mydb.cursor()
+mycursor.execute("SELECT * FROM news_tb")
+articles = mycursor.fetchall()
+# print(articles)
+# for i in articles:
+    # print(i)
+    # b = 0
+    # for x in hasil[0]:
+    #     if i[0] == x:
+            # b += 1
+            # print(i)
+    # for x in hasil:
+    #     print(x)
+
+
+
+
+

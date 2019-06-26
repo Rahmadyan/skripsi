@@ -4,7 +4,8 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
-from test import hasil, sorting_hasil
+from test import data_result
+from test3 import results
 import mysql.connector
 
 app = Flask(__name__)
@@ -40,6 +41,7 @@ def articles():
     result = cur.execute("SELECT * FROM news_tb")
 
     articles = cur.fetchall()
+    print(articles)
     # for i in range(0, len(articles)):
     #     for word in articles[i]:
     #         # print(word)
@@ -66,16 +68,36 @@ def article(id):
     # Get article
     result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
     article = cur.fetchone()
+    print(article)
 
-    sorting_hasil()
-    hasil_sorting = sorting_hasil()
-    hasil()
-    real_id = hasil()
+    #ambil data_result dan simpan ke result_tb
+    # sorted_similar_movies = data_result()
+    # sql = "DELETE FROM result_tb"
+    # cur.execute(sql)
+    # mysql.connection.commit()
+    #
+    # sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
+    # data = sorted_similar_movies
+    # cur.executemany(sql, data)
+    # mysql.connection.commit()
 
-    list_id_real_id = []
-    for i in enumerate(real_id):
-        list_id_real_id.append(i)
-    print(list_id_real_id)
+    # print(article)
+    # articles = results(id)
+    #
+    # sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
+    # data = articles
+    # cur.executemany(sql, data)
+    # mysql.connection.commit()
+
+    # print(articles)
+
+    # real_id = hasil()
+
+    # list_id_real_id = []
+    # for i in enumerate(real_id):
+    #     list_id_real_id.append(i)
+    # print(list_id_real_id)
+    # print(id)
     # parsing id artikel dan tetntukan urutan dari id tersebut berapa?
     # masukan urutan id ke dalam sql
     # terakhir panggil
@@ -83,15 +105,15 @@ def article(id):
     #     for x in range(o, len(hasil_sorting)):
     #         if
     #     print(i[0])
-    cur = mysql.connection.cursor()
-    result = cur.execute("SELECT * FROM news_tb")
-    articles = cur.fetchall()
-    print(articles)
+    # cur = mysql.connection.cursor()
+    # result = cur.execute("SELECT * FROM news_tb")
+    # articles = cur.fetchall()
+    # print(articles)
     # result = cur.execute("SELECT * FROM result_tb WHERE id_query = %s", [id])
     # a=cur.fetchall()
     # a = str(a[0]['content'])
 
-    return render_template('article.html', article=article, articles = articles)
+    return render_template('article.html', article=article)
 
 #Class Registrasi USER
 class RegisterForm(Form):

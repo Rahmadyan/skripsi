@@ -70,34 +70,42 @@ for i in enumerate(list_id):
 print("Ini adalah data real id dan id dokumen")
 print(list_id_real_id)
 
-id = 339
-print(id)
-hasil_deteksi = []
-for i in list_id_real_id:
-    if i[1] == id:
-        hasil_deteksi.append(i[0])
-hasil_deteksi = " ".join(str(x) for x in hasil_deteksi)
-print(hasil_deteksi)
+def results(a):
+    print("Ini adalah real id")
+    print(a)
 
-mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM `result_tb` WHERE id_query = %s", [hasil_deteksi])
-articles = mycursor.fetchall()
-print(articles)
+    hasil_deteksi = []
+    for i in list_id_real_id:
+        if i[1] == a:
+            hasil_deteksi.append(i[0])
+    hasil_deteksi = " ".join(str(x) for x in hasil_deteksi)
+    print("Ini adalah hasil deteksi real_id ada pada artikel urutan berapa")
+    print(hasil_deteksi)
 
-hasil = []
-for i in articles:
-    for x in list_id_real_id:
-        if i[2] == x[0]:
-            hasil.append(x[1])
-print(hasil)
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM `result_tb` WHERE id_query = %s", [hasil_deteksi])
+    articles = mycursor.fetchall()
+    print("mengambil data sesuai real id")
+    print(articles)
 
-mycursor = mydb.cursor()
+    hasil = []
+    for i in articles:
+        for x in list_id_real_id:
+            if i[2] == x[0]:
+                hasil.append(x[1])
+    print("mengambil real id sesuai dengan kesamaan/urutan terbesar")
+    print(hasil)
 
+    mycursor = mydb.cursor(dictionary=True)
+    # mycursor = mydb.cursor()
 
-mycursor.execute("SELECT * FROM news_tb where id IN ({})".format(",".join([str(i) for i in hasil])))
-myresult = mycursor.fetchall()
-print(myresult)
-results = sorted(myresult, key=lambda x: hasil.index(x[0]))
-print(results)
+    mycursor.execute("SELECT * FROM news_tb where id IN ({})".format(",".join([str(i) for i in hasil])))
+    myresult = mycursor.fetchall()
+
+    # results = sorted(myresult, key=lambda x: hasil.index(x[0]))
+
+    return myresult
+    # return ordered_results
+print(results(339))
 
 

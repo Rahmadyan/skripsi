@@ -112,7 +112,7 @@ def data_result():
 
     sorted_similar_movies = sorted(our_tfidf_comparisons,key=lambda x:x[0],reverse=True)
     return sorted_similar_movies
-print(data_result())
+# print(data_result())
 
 # mycursor = mydb.cursor()
 # sql = "DELETE FROM result_tb"

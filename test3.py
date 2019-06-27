@@ -60,19 +60,20 @@ a = mycursor.fetchall()
 
 
 
-mycursor = mydb.cursor()
-mycursor.execute("SELECT id FROM news_tb")
-a = mycursor.fetchall()
-list_id = list(itertools.chain(*a))
-list_id_real_id = []
-for i in enumerate(list_id):
-    list_id_real_id.append(i)
-print("Ini adalah data real id dan id dokumen")
-print(list_id_real_id)
 
 def results(a):
     print("Ini adalah real id")
     print(a)
+
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT id FROM news_tb")
+    all = mycursor.fetchall()
+    list_id = list(itertools.chain(*all))
+    list_id_real_id = []
+    for i in enumerate(list_id):
+        list_id_real_id.append(i)
+    print("Ini adalah data real id dan id dokumen")
+    print(list_id_real_id)
 
     hasil_deteksi = []
     for i in list_id_real_id:
@@ -96,16 +97,16 @@ def results(a):
     print("mengambil real id sesuai dengan kesamaan/urutan terbesar")
     print(hasil)
 
-    mycursor = mydb.cursor(dictionary=True)
+    mycursor = mydb.cursor()
     # mycursor = mydb.cursor()
 
     mycursor.execute("SELECT * FROM news_tb where id IN ({})".format(",".join([str(i) for i in hasil])))
     myresult = mycursor.fetchall()
-
-    # results = sorted(myresult, key=lambda x: hasil.index(x[0]))
-
-    return myresult
-    # return ordered_results
-print(results(339))
+    # print(myresult)
+    results = sorted(myresult, key=lambda x: hasil.index(x[0]))
+    # list_of_dict = [dict(zip(hasil, values)) for values in myresult]
+    # return list_of_dict
+    return results
+# print(results(340))
 
 

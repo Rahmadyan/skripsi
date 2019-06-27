@@ -41,7 +41,7 @@ def articles():
     result = cur.execute("SELECT * FROM news_tb")
 
     articles = cur.fetchall()
-    print(articles)
+    # print(articles)
     # for i in range(0, len(articles)):
     #     for word in articles[i]:
     #         # print(word)
@@ -56,8 +56,10 @@ def articles():
     # Close connection
     cur.close()
 
-
-
+@app.route('/article/<string:id>/')
+def articless():
+    result = cur.execute("SELECT * FROM show_data")
+    artikels = cur.fetchall()
 
     # ambil id yang sesuai dengan id pembanding di tabel
 #Buka Artikel
@@ -68,7 +70,7 @@ def article(id):
     # Get article
     result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
     article = cur.fetchone()
-    print(article)
+    # print(article)
 
     #ambil data_result dan simpan ke result_tb
     # sorted_similar_movies = data_result()
@@ -81,14 +83,19 @@ def article(id):
     # cur.executemany(sql, data)
     # mysql.connection.commit()
 
-    # print(article)
-    # articles = results(id)
-    #
-    # sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
-    # data = articles
-    # cur.executemany(sql, data)
-    # mysql.connection.commit()
+    # print(article)'
+    # print(id)
+    b = int(id)
+    # ambil metode result di clas test3
+    hasil = results(b)
+    cur.execute("TRUNCATE TABLE show_data")
+    sql = "INSERT INTO show_data (id, title, time, imagelink, content) VALUES (%s, %s, %s, %s, %s)"
+    data = hasil
+    cur.executemany(sql, data)
+    mysql.connection.commit()
 
+
+    # print(artikels)
     # print(articles)
 
     # real_id = hasil()

@@ -25,8 +25,27 @@
 
     <aside class="col-md-4 blog-sidebar">
       <div class="p-4 mb-3">
-        <h4>Judul</h4>
-        <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+        <!--<h4>Judul</h4>-->
+          <!--<a href="/article/open">Lihat Rekomendasi</a>-->
+        <!--<p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>-->
+          <ul class="list-group">
+    {% for article in articless %}
+        <!--<li class="list-group-item">-->
+            <!--<a href="article/{{article.id}}"> {{article.title}}</a></li>-->
+        <!--</ul>-->
+        <div class="media position-relative">
+          <img src="{{article.imagelink}}" width="180" height="140" class="mr-3" alt="...">
+          <div class="media-body">
+              <small>{{article.time}}</small>
+            <h5 class="mt-0">{{article.title}}</h5>
+              <p>{{article.id}}</p>
+            <p>{{ article.content | truncate(140) | safe}}</p>
+            <a href="/article/{{article.id}}" class="stretched-link">Go somewhere</a>
+          </div>
+        </div>
+        <br>
+    {%endfor%}
+    </ul>
       </div>
     </aside>
 
@@ -35,4 +54,7 @@
 
 <hr>
 
+{% endblock %}
+
+{% block body2 %}
 {% endblock %}

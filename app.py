@@ -56,13 +56,20 @@ def articles():
     # Close connection
     cur.close()
 
-@app.route('/article/<string:id>/')
-def articless():
-    result = cur.execute("SELECT * FROM show_data")
-    artikels = cur.fetchall()
+# @app.route('/article/open')
+# def articless():
+#     cur = mysql.connection.cursor()
+#     result = cur.execute("SELECT * FROM show_data")
+#     articless = cur.fetchall()
+#     if result > 0:
+#         return render_template('r_article.html', articless=articless)
+#     else:
+#         msg = 'No Articles Found'
+#         return render_template('r_article', msg=msg)
 
     # ambil id yang sesuai dengan id pembanding di tabel
 #Buka Artikel
+
 @app.route('/article/<string:id>/')
 def article(id):
     # Create cursor
@@ -97,7 +104,8 @@ def article(id):
 
     # print(artikels)
     # print(articles)
-
+    result = cur.execute("SELECT * FROM show_data")
+    articless = cur.fetchall()
     # real_id = hasil()
 
     # list_id_real_id = []
@@ -120,7 +128,7 @@ def article(id):
     # a=cur.fetchall()
     # a = str(a[0]['content'])
 
-    return render_template('article.html', article=article)
+    return render_template('article.html', article=article, articless=articless)
 
 #Class Registrasi USER
 class RegisterForm(Form):

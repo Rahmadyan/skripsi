@@ -4,8 +4,11 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
-from test import data_result
+# from test import data_result
+# from flask_sqlalchemy import SQLAlchemy
+# import flask_whooshalchemy as wa
 from test3 import results
+from test2 import jumlah_query
 import mysql.connector
 
 app = Flask(__name__)
@@ -25,6 +28,17 @@ Articles = Articles()
 @app.route('/')
 def index():
     # print(hasil())
+    # ambil data_result dan simpan ke result_tb
+    # sorted_similar_movies = data_result()
+    # sql = "DELETE FROM result_tb"
+    # cur.execute(sql)
+    # mysql.connection.commit()
+    #
+    # sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
+    # data = sorted_similar_movies
+    # cur.executemany(sql, data)
+    # mysql.connection.commit()
+
     return render_template('home.html')
 
 @app.route('/about')
@@ -41,6 +55,13 @@ def articles():
     result = cur.execute("SELECT * FROM news_tb")
 
     articles = cur.fetchall()
+
+    jumlah_qry = jumlah_query()
+    if jumlah_qry == jumlah_qry:
+        print('maka hanya tampilkan saja')
+    else:
+        print('lakukan perhitungan')
+    # print()
     # print(articles)
     # for i in range(0, len(articles)):
     #     for word in articles[i]:
@@ -79,16 +100,7 @@ def article(id):
     article = cur.fetchone()
     # print(article)
 
-    #ambil data_result dan simpan ke result_tb
-    # sorted_similar_movies = data_result()
-    # sql = "DELETE FROM result_tb"
-    # cur.execute(sql)
-    # mysql.connection.commit()
-    #
-    # sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
-    # data = sorted_similar_movies
-    # cur.executemany(sql, data)
-    # mysql.connection.commit()
+
 
     # print(article)'
     # print(id)
@@ -96,7 +108,7 @@ def article(id):
     # ambil metode result di clas test3
     hasil = results(b)
     cur.execute("TRUNCATE TABLE show_data")
-    sql = "INSERT INTO show_data (id, title, time, imagelink, content) VALUES (%s, %s, %s, %s, %s)"
+    sql = "INSERT INTO show_data (id, title, author, time, imagelink, content) VALUES (%s, %s, %s, %s, %s, %s)"
     data = hasil
     cur.executemany(sql, data)
     mysql.connection.commit()
@@ -104,7 +116,7 @@ def article(id):
 
     # print(artikels)
     # print(articles)
-    result = cur.execute("SELECT * FROM show_data")
+    result = cur.execute("SELECT * FROM show_data limit 5 offset 1")
     articless = cur.fetchall()
     # real_id = hasil()
 
@@ -214,15 +226,6 @@ def is_logged_in(f):
             flash('Unauthorized, Please login', 'danger')
             return redirect(url_for('login'))
     return wrap
-
-# Logout
-@app.route('/logout')
-@is_logged_in #dikasih Satpam
-def logout():
-    session.clear()
-    flash('You are now logged out', 'success')
-    return redirect(url_for('login'))
-
 # Dashboard ADMIN
 @app.route('/dashboard')
 @is_logged_in #dikasih Satpam
@@ -245,6 +248,33 @@ def dashboard():
     # return render_template('dashboard.html', msg=msg)
     # Close connection
     # cur.close()
+
+#Add Class Article
+class ArticleForm(Form):
+    title = StringField('Title', [validators.Length(min=1, max=200)])
+    content = TextAreaField('Content', [validators.Length(min=30)])
+
+#Add Article
+@app.route('/add_article', methods=['GET','POST'])
+@is_logged_in #dikasih Satpam
+def add_article():
+    form = ArticleForm(request.form)
+    if request.method == 'POST' and form.validate():
+        title = form.title.data
+        content=form.content.data
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO news_tb(article, )")
+
+# Logout
+@app.route('/logout')
+@is_logged_in #dikasih Satpam
+def logout():
+    session.clear()
+    flash('You are now logged out', 'success')
+    return redirect(url_for('login'))
+
+
 
 if __name__ == '__main__':
     #membuat secret key untuk register

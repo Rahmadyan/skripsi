@@ -119,10 +119,13 @@ def data_result():
 # mycursor.execute(sql)
 # mydb.commit()
 #
-# sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
-# data = sorted_similar_movies
-# mycursor.executemany(sql, data)
-# mydb.commit()
+sorted_similar_movies = data_result()
+mycursor.execute("TRUNCATE TABLE result_tb")
+sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
+data = sorted_similar_movies
+mycursor.executemany(sql, data)
+mydb.commit()
+mycursor.close()
 
 # def hasil():
 #     mycursor = mydb.cursor()

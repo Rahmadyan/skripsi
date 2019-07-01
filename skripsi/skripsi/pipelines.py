@@ -38,8 +38,9 @@ class SkripsiPipeline(object):
         return item
 
     def store_db(self,item):
-        self.curr.execute("INSERT INTO news_tb (title, time, imagelink, content) values (%s,%s,%s,%s)",(
+        self.curr.execute("INSERT INTO news_tb (title, author, time, imagelink, content) values (%s,%s,%s,%s,%s)",(
             item['title'][0],
+            item['author'][0],
             item['time'][0],
             item['imagelink'][0],
             item['content'][0]

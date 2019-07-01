@@ -22,6 +22,7 @@ class SkripsiSpiderSpider(scrapy.Spider):
         content = response.xpath(".//div[@class='vidy-embed']/descendant::text()").extract()
 
         items['title'] = extract_with_css('h1::text'),
+        items['author'] = extract_with_css('.author a::text'),
         items['time'] = extract_with_css('time::text'),
         items['imagelink'] = extract_with_css('.article img::attr(src)'),
         items['content'] = ''.join(content),

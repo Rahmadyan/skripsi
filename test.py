@@ -19,8 +19,6 @@ x = mycursor.fetchall()
 
 documents = list(itertools.chain(*x))
 
-
-
 #1. tokenizing stopword dan stemming
 dictOfWords = {}
 
@@ -42,8 +40,6 @@ for index, sentence in enumerate(documents):
     # print(wordsFiltered)
     dictOfWords[index] = [word for word in wordsFiltered]
 # print(dictOfWords)
-
-#2. Menghilangkan kata duplikat
 termFrequency = []
 for i in range(0, len(documents)):
     termFrequency.append([])

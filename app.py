@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from data import Articles
+# from data import Articles
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -23,7 +23,7 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # init MYSQL
 mysql = MySQL(app)
 
-Articles = Articles()
+# Articles = Articles()
 
 @app.route('/')
 def index():
@@ -56,11 +56,6 @@ def articles():
 
     articles = cur.fetchall()
 
-    jumlah_qry = jumlah_query()
-    if jumlah_qry == jumlah_qry:
-        print('maka hanya tampilkan saja')
-    else:
-        print('lakukan perhitungan')
     # print()
     # print(articles)
     # for i in range(0, len(articles)):
@@ -264,7 +259,12 @@ def add_article():
         content=form.content.data
 
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO news_tb(article, )")
+        cur.execute("INSERT INTO news_tb(title, content, author) VALUES(%s,%s,%s)",(title, content, session['username']))
+        mysql.connection.commit()
+        cur.close()
+        flash('Article Created', 'success')
+        return redirect(url_for('dashboard'))
+    return render_template('add_article.html', form = form)
 
 # Logout
 @app.route('/logout')

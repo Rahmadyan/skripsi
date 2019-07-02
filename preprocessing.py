@@ -19,7 +19,7 @@ x = mycursor.fetchall()
 # print(x)
 # print(x)
 documents = list(itertools.chain(*x))
-print(documents)
+# print(documents)
 
 # documents = [list(x) for x in b]
 # print(documents)
@@ -55,7 +55,7 @@ for i in range(0, len(documents)):
         if wordFreq not in listOfNoDuplicates:
             listOfNoDuplicates.append(wordFreq)
         termFrequency[i] = listOfNoDuplicates
-# print(termFrequency)
+print(termFrequency)
 # x = termFrequency.keys()
 # print(x)
 
@@ -71,7 +71,7 @@ for i in range(0, len(documents)):
         normalizedFreq = wordFreq[1]/lenOfSentence #pembagain kemunculan kata dengan jumlah kata dalam kalimat
         listOfNormalized.append((wordFreq[0],normalizedFreq))
     normalizedTermFrequency[i] = listOfNormalized
-print(normalizedTermFrequency)
+# print(normalizedTermFrequency)
 
 #4.IDF ngelu
 
@@ -115,10 +115,10 @@ for index, voc in enumerate(allDocumentsNoDuplicate):
 # IDF RUMUS = log(n/df) n= jumlah dokumen df = jumlah dokumen dimana istilah/kata itu muncul
 dictOFIDFNoDuplicates = {}
 for i in range(0, len(normalizedTermFrequency)):
-    print(i)
+    # print(i)
     listOfIDFCalcs = []
     for word in normalizedTermFrequency[i]:
-        print(word)
+        # print(word)
         for x in range(0, len(jumlahDokumenDimanaKataMuncul)):
             if word[0] == jumlahDokumenDimanaKataMuncul[x][0]:
                 listOfIDFCalcs.append((word[0],math.log10(len(documents)/jumlahDokumenDimanaKataMuncul[x][1])))

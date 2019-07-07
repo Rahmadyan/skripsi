@@ -98,15 +98,11 @@ def results(a):
     print(hasil)
 
     mycursor = mydb.cursor()
-    # mycursor = mydb.cursor()
 
     mycursor.execute("SELECT * FROM news_tb where id IN ({})".format(",".join([str(i) for i in hasil])))
     myresult = mycursor.fetchall()
     # print(myresult)
     results = sorted(myresult, key=lambda x: hasil.index(x[0]))
-    # list_of_dict = [dict(zip(hasil, values)) for values in myresult]
-    # return list_of_dict
     return results
-# print(results(340))
 
 

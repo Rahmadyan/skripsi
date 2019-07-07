@@ -7,6 +7,7 @@ from functools import wraps
 # from test import data_result
 # from flask_sqlalchemy import SQLAlchemy
 # import flask_whooshalchemy as wa
+from flask.ext.uploads import UploadSet, configure_uploads, Images
 from test3 import results
 from test2 import jumlah_query
 import mysql.connector
@@ -20,6 +21,8 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'news'
 #seting ouputdata dari database ke dictionary
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['UPLOADED_PHOTOS_DEST'] = 'img'
+configure_uploads(app, pho)
 # init MYSQL
 mysql = MySQL(app)
 
@@ -94,9 +97,6 @@ def article(id):
     result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
     article = cur.fetchone()
     # print(article)
-
-
-
     # print(article)'
     # print(id)
     b = int(id)

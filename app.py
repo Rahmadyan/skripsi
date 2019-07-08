@@ -4,13 +4,14 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+import os
+from werkzeug.utils import secure_filename
+
 # from test import data_result
-# from flask_sqlalchemy import SQLAlchemy
-# import flask_whooshalchemy as wa
-from flask.ext.uploads import UploadSet, configure_uploads, Images
 from test3 import results
 from test2 import jumlah_query
 import mysql.connector
+
 
 app = Flask(__name__)
 
@@ -21,8 +22,11 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'news'
 #seting ouputdata dari database ke dictionary
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-app.config['UPLOADED_PHOTOS_DEST'] = 'img'
-configure_uploads(app, pho)
+
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 # init MYSQL
 mysql = MySQL(app)
 
@@ -30,18 +34,6 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    # print(hasil())
-    # ambil data_result dan simpan ke result_tb
-    # sorted_similar_movies = data_result()
-    # sql = "DELETE FROM result_tb"
-    # cur.execute(sql)
-    # mysql.connection.commit()
-    #
-    # sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
-    # data = sorted_similar_movies
-    # cur.executemany(sql, data)
-    # mysql.connection.commit()
-
     return render_template('home.html')
 
 @app.route('/about')
@@ -225,7 +217,20 @@ def is_logged_in(f):
 @app.route('/dashboard')
 @is_logged_in #dikasih Satpam
 def dashboard():
-    return render_template('admin_dash.html')
+    cur = mysql.connection.cursor()
+    # Get articles
+    result = cur.execute("SELECT * FROM news_tb")
+
+    articles = cur.fetchall()
+
+    if result > 0:
+        return render_template('admin_dash.html', articles=articles)
+    else:
+        msg = 'No Articles Found'
+        return render_template('admin_dash.html', msg=msg)
+    # Close connection
+    cur.close()
+
     # Create cursor
     # cur = mysql.connection.cursor()
 
@@ -249,22 +254,98 @@ class ArticleForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=200)])
     content = TextAreaField('Content', [validators.Length(min=30)])
 
+#pengecekan file degan menggunakan rsplit
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 #Add Article
 @app.route('/add_article', methods=['GET','POST'])
 @is_logged_in #dikasih Satpam
 def add_article():
     form = ArticleForm(request.form)
     if request.method == 'POST' and form.validate():
+        file = request.files['file']
+
+        if 'file' not in request.files:
+            return render_template('add_article.html')
+
+        if file.filename == '':
+            return render_template('add_article.html')
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # return 'file ' + filename + ' di simpan' + ' <a href="/upload">kembali</a>'
+
         title = form.title.data
         content=form.content.data
-
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO news_tb(title, content, author) VALUES(%s,%s,%s)",(title, content, session['username']))
+        cur.execute("INSERT INTO news_tb(title, imagelink, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
         mysql.connection.commit()
         cur.close()
         flash('Article Created', 'success')
         return redirect(url_for('dashboard'))
     return render_template('add_article.html', form = form)
+
+# Edit Artikel
+@app.route('/edit_article/<string:id>', methods=['GET','POST'])
+@is_logged_in #dikasih Satpam
+def edit_article(id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+
+    # Get article by id
+    result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
+    article = cur.fetchone()
+    cur.close()
+    # Get form
+    form = ArticleForm(request.form)
+    form.title.data = article['title']
+    form.content.data = article['content']
+
+    if request.method == 'POST' and form.validate():
+        file = request.files['file']
+
+        if 'file' not in request.files:
+            return render_template('add_article.html')
+
+        if file.filename == '':
+            return render_template('add_article.html')
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # return 'file ' + filename + ' di simpan' + ' <a href="/upload">kembali</a>'
+        title = request.form['title']
+        content = request.form['content']
+        cur = mysql.connection.cursor()
+        # cur.execute("INSERT INTO news_tb(title, imagelink, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
+        cur.execute("UPDATE news_tb SET title=%s, imagelink=%s, content=%s WHERE id=%s",(title, filename, content, id))
+        mysql.connection.commit()
+        cur.close()
+        flash('Article Updated', 'success')
+        return redirect(url_for('dashboard'))
+    return render_template('add_article.html', form = form)
+
+# Delete Article
+@app.route('/delete_article/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_article(id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+
+    # Execute
+    cur.execute("DELETE FROM news_tb WHERE id = %s", [id])
+
+    # Commit to DB
+    mysql.connection.commit()
+
+    # Close connection
+    cur.close()
+
+    flash('Article Deleted', 'success')
+
+    return redirect(url_for('dashboard'))
 
 # Logout
 @app.route('/logout')

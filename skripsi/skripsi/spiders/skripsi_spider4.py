@@ -15,25 +15,20 @@ class SkripsiSpider3(scrapy.Spider):
         if SkripsiSpider3.page_number <=3:
             SkripsiSpider3.page_number += 1
             yield response.follow(previous_page, callback = self.parse)
-        # for href in response.css('.pagination-sm a::attr(href)'):
-        #     yield response.follow(href, self.parse)
+
 
     def parse_author(self, response):
         items = SkripsiItem()
         def extract_with_css(query):
             return response.css(query).get(default='').strip()
         content = response.xpath(".//div[@class='itp_bodycontent detail_text']/text()").extract()
-        # content = response.xpath
-        # yield{
-        #     'title': extract_with_css('h1::text'),
-        #     'time': extract_with_css('.jdl .date::text'),
-        #     'imagelink': extract_with_css('.pic_artikel img::attr(src)'),
-        #     'content': ''.join(content),
-        # }
+
         items['title']= extract_with_css('h1::text'),
+        items['author'] = extract_with_css('.author::text'),
         items['time']= extract_with_css('.jdl .date::text'),
         items['imagelink']= extract_with_css('.pic_artikel img::attr(src)'),
-        items['content']= ''.join(content),
+        if response.xpath(".//div[@class='itp_bodycontent detail_text']/text()"):
+            items['content']= ''.join(content),
         yield items
-        # items['content'] = ''.join(content)
+
 

@@ -7,6 +7,7 @@ from functools import wraps
 import os
 from werkzeug.utils import secure_filename
 
+# from test import lakukan_perhitungan
 # from test import data_result
 from test3 import results
 from test2 import jumlah_query
@@ -23,7 +24,7 @@ app.config['MYSQL_DB'] = 'news'
 #seting ouputdata dari database ke dictionary
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'uploads/img'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -51,14 +52,6 @@ def articles():
 
     articles = cur.fetchall()
 
-    # print()
-    # print(articles)
-    # for i in range(0, len(articles)):
-    #     for word in articles[i]:
-    #         # print(word)
-    #         print([word]['content'])
-            # print(str(word[0]['id']))
-        # print(i)
     if result > 0:
         return render_template('articles.html', articles=articles)
     else:
@@ -67,66 +60,21 @@ def articles():
     # Close connection
     cur.close()
 
-# @app.route('/article/open')
-# def articless():
-#     cur = mysql.connection.cursor()
-#     result = cur.execute("SELECT * FROM show_data")
-#     articless = cur.fetchall()
-#     if result > 0:
-#         return render_template('r_article.html', articless=articless)
-#     else:
-#         msg = 'No Articles Found'
-#         return render_template('r_article', msg=msg)
 
-    # ambil id yang sesuai dengan id pembanding di tabel
 #Buka Artikel
-
 @app.route('/article/<string:id>/')
 def article(id):
     # Create cursor
+    b = int(id)
+    results(b)
     cur = mysql.connection.cursor()
     # Get article
-    result = cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
+    cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
     article = cur.fetchone()
-    # print(article)
-    # print(article)'
-    # print(id)
-    b = int(id)
-    # ambil metode result di clas test3
-    hasil = results(b)
-    cur.execute("TRUNCATE TABLE show_data")
-    sql = "INSERT INTO show_data (id, title, author, time, imagelink, content) VALUES (%s, %s, %s, %s, %s, %s)"
-    data = hasil
-    cur.executemany(sql, data)
-    mysql.connection.commit()
 
-
-    # print(artikels)
-    # print(articles)
-    result = cur.execute("SELECT * FROM show_data limit 5 offset 1")
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM show_data limit 10 offset 1")
     articless = cur.fetchall()
-    # real_id = hasil()
-
-    # list_id_real_id = []
-    # for i in enumerate(real_id):
-    #     list_id_real_id.append(i)
-    # print(list_id_real_id)
-    # print(id)
-    # parsing id artikel dan tetntukan urutan dari id tersebut berapa?
-    # masukan urutan id ke dalam sql
-    # terakhir panggil
-    # for i in list_id_real_id:
-    #     for x in range(o, len(hasil_sorting)):
-    #         if
-    #     print(i[0])
-    # cur = mysql.connection.cursor()
-    # result = cur.execute("SELECT * FROM news_tb")
-    # articles = cur.fetchall()
-    # print(articles)
-    # result = cur.execute("SELECT * FROM result_tb WHERE id_query = %s", [id])
-    # a=cur.fetchall()
-    # a = str(a[0]['content'])
-
     return render_template('article.html', article=article, articless=articless)
 
 #Class Registrasi USER
@@ -140,8 +88,20 @@ class RegisterForm(Form):
     ])
     confirm = PasswordField('Confirm Password')
 
+#Satpam / Mengecek apakah sudah login
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+
 # User Register
 @app.route('/register', methods=['GET', 'POST'])
+@is_logged_in #dikasih Satpam
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -203,16 +163,7 @@ def login():
             return render_template('login.html', error=error)
     return render_template('login.html')
 
-#Satpam / Mengecek apakah sudah login
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('Unauthorized, Please login', 'danger')
-            return redirect(url_for('login'))
-    return wrap
+
 # Dashboard ADMIN
 @app.route('/dashboard')
 @is_logged_in #dikasih Satpam
@@ -231,23 +182,6 @@ def dashboard():
     # Close connection
     cur.close()
 
-    # Create cursor
-    # cur = mysql.connection.cursor()
-
-    # Get articles
-    #result = cur.execute("SELECT * FROM articles")
-    # Show articles only from the user logged in
-    # result = cur.execute("SELECT * FROM articles WHERE author = %s", [session['username']])
-    #
-    # articles = cur.fetchall()
-    #
-    # if result > 0:
-    #     return render_template('dashboard.html', articles=articles)
-    # else:
-    #     msg = 'No Articles Found'
-    # return render_template('dashboard.html', msg=msg)
-    # Close connection
-    # cur.close()
 
 #Add Class Article
 class ArticleForm(Form):
@@ -282,9 +216,11 @@ def add_article():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO news_tb(title, imagelink, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
         mysql.connection.commit()
+
         cur.close()
         flash('Article Created', 'success')
         return redirect(url_for('dashboard'))
+
     return render_template('add_article.html', form = form)
 
 # Edit Artikel
@@ -322,10 +258,13 @@ def edit_article(id):
         # cur.execute("INSERT INTO news_tb(title, imagelink, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
         cur.execute("UPDATE news_tb SET title=%s, imagelink=%s, content=%s WHERE id=%s",(title, filename, content, id))
         mysql.connection.commit()
+
         cur.close()
         flash('Article Updated', 'success')
         return redirect(url_for('dashboard'))
+
     return render_template('add_article.html', form = form)
+
 
 # Delete Article
 @app.route('/delete_article/<string:id>', methods=['POST'])

@@ -97,48 +97,34 @@ def cosine_similarity(vector1, vector2):
         return 0
     return dot_product/magnitude
 
-def data_result():
-    tfidf_representation = tfidf(termFrequency)
-    # print(tfidf_representation)
-    our_tfidf_comparisons = []
-    for count_0, doc_0 in enumerate(tfidf_representation):
-        # print(count_0,doc_0)
-        for count_1, doc_1 in enumerate(tfidf_representation):
-            our_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
+tfidf_representation = tfidf(termFrequency)
+our_tfidf_comparisons = []
+for count_0, doc_0 in enumerate(tfidf_representation):
+    for count_1, doc_1 in enumerate(tfidf_representation):
+        our_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
 
-    sorted_similar_movies = sorted(our_tfidf_comparisons,key=lambda x:x[0],reverse=True)
-    return sorted_similar_movies
-# print(data_result())
+sorted_similar_movies = sorted(our_tfidf_comparisons,key=lambda x:x[0],reverse=True)
 
-# mycursor = mydb.cursor()
-# sql = "DELETE FROM result_tb"
-# mycursor.execute(sql)
-# mydb.commit()
+# def data_result():
+#     tfidf_representation = tfidf(termFrequency)
+#     # print(tfidf_representation)
+#     our_tfidf_comparisons = []
+#     for count_0, doc_0 in enumerate(tfidf_representation):
+#         # print(count_0,doc_0)
+#         for count_1, doc_1 in enumerate(tfidf_representation):
+#             our_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
 #
-sorted_similar_movies = data_result()
-mycursor.execute("TRUNCATE TABLE result_tb")
-sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
-data = sorted_similar_movies
-mycursor.executemany(sql, data)
-mydb.commit()
-mycursor.close()
+#     sorted_similar_movies = sorted(our_tfidf_comparisons,key=lambda x:x[0],reverse=True)
+#     return sorted_similar_movies
 
-# def hasil():
-#     mycursor = mydb.cursor()
-#     mycursor.execute("SELECT id FROM news_tb")
-#     a = mycursor.fetchall()
-#     list_id = list(itertools.chain(*a))
-#     return list_id
-# print(hasil())
-
-# h = hasil()
-# for i in range(0, len(h)):
-#     print(i)
-#     for x in h[i]:
-#         print(x)
-        # if i in h[i] ==
-    # print(i)
-
-
+# sorted_similar_movies = data_result()
+def lakukan_perhitungan():
+    mycursor.execute("TRUNCATE TABLE result_tb")
+    sql = "INSERT INTO result_tb (result, id_query, id_document) VALUES (%s, %s, %s)"
+    data = sorted_similar_movies
+    mycursor.executemany(sql, data)
+    mydb.commit()
+    mycursor.close()
+print (lakukan_perhitungan())
 
 

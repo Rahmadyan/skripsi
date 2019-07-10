@@ -84,7 +84,7 @@ def results(a):
     print(hasil_deteksi)
 
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT * FROM `result_tb` WHERE id_query = %s", [hasil_deteksi])
+    mycursor.execute("SELECT * FROM result_tb WHERE id_query = %s", [hasil_deteksi])
     articles = mycursor.fetchall()
     print("mengambil data sesuai real id")
     print(articles)
@@ -103,6 +103,10 @@ def results(a):
     myresult = mycursor.fetchall()
     # print(myresult)
     results = sorted(myresult, key=lambda x: hasil.index(x[0]))
-    return results
 
+    mycursor.execute("TRUNCATE TABLE show_data")
+    sql = "INSERT INTO show_data (id, title, author, time, imagelink, content) VALUES (%s, %s, %s, %s, %s, %s)"
+    mycursor.executemany(sql, results)
+    mydb.commit()
 
+# print (results(453))

@@ -28,7 +28,7 @@ document_2 = "sar trunojoyo diklat bumi kemah wisata air terjun mojokerto bantu 
 document_3 = "roadshow speedy trunojoyo seminar internet sehat cangkruk komunitas workshop lomba band"
 document_4 = "perintah kabupaten pamekasan henti program bantu beasiswa mahasiswa pamekasan universitas trunojoyo"
 document_5 = "11 staf universitas trunojoyo magang fakultas teknik industri uii"
-document_6 = "perpus datang tamu 2 guru tinggi staf perpus trunojoyo staf perpus universitas gunadarma"
+document_6 = "perpus universitas airlangga datang tamu 2 guru tinggi staf perpus universitas trunojoyo staf perpus universitas gunadarma"
 all_documents = [document_0, document_1, document_2, document_3, document_4, document_5, document_6]
 
 # print(all_documents)
@@ -63,9 +63,9 @@ def inverse_document_frequencies(tokenized_documents):
 
 def tfidf(documents):
     tokenized_documents = [tokenize(d) for d in documents]
-    # print(tokenized_documents)
+    print(tokenized_documents)
     idf = inverse_document_frequencies(tokenized_documents)
-    # print(idf.keys())
+    print(idf)
     tfidf_documents = []
     for document in tokenized_documents:
         doc_tfidf = []
@@ -97,7 +97,7 @@ our_tfidf_comparisons = []
 for count_0, doc_0 in enumerate(tfidf_representation):
     for count_1, doc_1 in enumerate(tfidf_representation):
         our_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
-# print(our_tfidf_comparisons)
+print(our_tfidf_comparisons)
 
 skl_tfidf_comparisons = []
 for count_0, doc_0 in enumerate(sklearn_representation.toarray()):
@@ -112,8 +112,8 @@ for count_0, doc_0 in enumerate(sklearn_representation.toarray()):
 # print(tfidf_representation)
 # print(our_tfidf_comparisons)
 # print(our_tfidf_comparisons)
-def jumlah_query():
-    mycursor = mydb.cursor()
-    mycursor.execute("SELECT COUNT(*) FROM news_tb")
-    a = mycursor.fetchone()[0]
-    return a
+# def jumlah_query():
+#     mycursor = mydb.cursor()
+#     mycursor.execute("SELECT COUNT(*) FROM news_tb")
+#     a = mycursor.fetchone()[0]
+#     return a

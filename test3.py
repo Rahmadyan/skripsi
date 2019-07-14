@@ -21,8 +21,6 @@ x = mycursor.fetchall()
 documents = list(itertools.chain(*x))
 # print(documents)
 
-
-
 # documents = [list(x) for x in b]
 # print(documents)
 

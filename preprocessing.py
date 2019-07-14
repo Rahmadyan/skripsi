@@ -139,7 +139,7 @@ for i in range(0,len(normalizedTermFrequency)):
         listOFTF_IDF.append((TFsentence[x][0],TFsentence[x][1]*IDFsentence[x][1]))
     dictOFTF_IDF[i] = listOFTF_IDF
     # dictOFTF_IDF = listOFTF_IDF
-# print(dictOFTF_IDF)
+print(dictOFTF_IDF)
 
 # print(math.log10(7/5))
 

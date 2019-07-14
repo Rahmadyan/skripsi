@@ -10,7 +10,6 @@ from werkzeug.utils import secure_filename
 # from test import lakukan_perhitungan
 # from test import data_result
 from test3 import results
-from test2 import jumlah_query
 import mysql.connector
 
 
@@ -114,7 +113,7 @@ def register():
         cur = mysql.connection.cursor()
 
         # Execute query
-        cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
+        cur.execute("INSERT INTO admin(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
 
         # Commit to DB
         mysql.connection.commit()
@@ -138,7 +137,7 @@ def login():
         cur = mysql.connection.cursor()
 
         # Get user by username
-        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+        result = cur.execute("SELECT * FROM admin WHERE username = %s", [username])
 
         if result > 0:
             # Get stored hash

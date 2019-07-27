@@ -7,7 +7,7 @@ from functools import wraps
 import os
 from werkzeug.utils import secure_filename
 
-# from test import lakukan_perhitungan
+from test import lakukan_perhitungan
 # from test import data_result
 from test3 import results
 import mysql.connector
@@ -71,10 +71,10 @@ def article(id):
     cur.execute("SELECT * FROM news_tb WHERE id = %s", [id])
     article = cur.fetchone()
 
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM show_data limit 10 offset 1")
+    cur.execute("SELECT * FROM show_data limit 5 offset 1")
     articless = cur.fetchall()
     return render_template('article.html', article=article, articless=articless)
+
 
 #Class Registrasi USER
 class RegisterForm(Form):
@@ -215,8 +215,9 @@ def add_article():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO news_tb(title, imagelink, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
         mysql.connection.commit()
-
+        # lakukan_perhitungan()
         cur.close()
+
         flash('Article Created', 'success')
         return redirect(url_for('dashboard'))
 
@@ -292,8 +293,6 @@ def logout():
     session.clear()
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
-
-
 
 if __name__ == '__main__':
     #membuat secret key untuk register

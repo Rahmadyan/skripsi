@@ -4,6 +4,7 @@ from ..items import SkripsiItem
 class SkripsiSpider3(scrapy.Spider):
     name = 'skripsi4'
     page_number = 2
+    custom_settings = {'CLOSESPIDER_ITEMCOUNT': 10}
     start_urls = ['https://www.detik.com/pemilu']
 
     def parse(self, response):
@@ -22,7 +23,7 @@ class SkripsiSpider3(scrapy.Spider):
         def extract_with_css(query):
             return response.css(query).get(default='').strip()
         content = response.xpath(".//div[@class='itp_bodycontent detail_text']/text()").extract()
-
+        items['url'] = response.url,
         items['title']= extract_with_css('h1::text'),
         items['author'] = extract_with_css('.author::text'),
         items['time']= extract_with_css('.jdl .date::text'),

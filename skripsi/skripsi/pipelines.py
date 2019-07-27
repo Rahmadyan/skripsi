@@ -6,6 +6,7 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 import mysql.connector
+from test import lakukan_perhitungan
 
 class SkripsiPipeline(object):
 
@@ -16,8 +17,8 @@ class SkripsiPipeline(object):
     def create_connection(self):
         self.conn = mysql.connector.connect(
             host = 'localhost',
-            user = 'root',
             password = '',
+            user = 'root',
             database = 'news'
         )
         self.curr = self.conn.cursor()
@@ -38,14 +39,19 @@ class SkripsiPipeline(object):
         return item
 
     def store_db(self,item):
-        self.curr.execute("INSERT INTO news_tb (title, author, time, imagelink, content) values (%s,%s,%s,%s,%s)",(
+        self.curr.execute("INSERT INTO news_tb (url, title, author, time, crawl_time, imagelink, content) values (%s,%s,%s,%s,%s,%s,%s)",(
+            item['url'][0],
             item['title'][0],
             item['author'][0],
             item['time'][0],
+            item['crawl_time'][0],
             item['imagelink'][0],
             item['content'][0]
         ))
         self.conn.commit()
+
+    def close_spider(self, spider):
+        lakukan_perhitungan()
 
 
 

@@ -3,6 +3,7 @@ from ..items import SkripsiItem
 
 class SkripsiSpiderSpider(scrapy.Spider):
     name = 'skripsi2'
+    custom_settings = {'CLOSESPIDER_ITEMCOUNT': 10}
     start_urls = ['https://www.tribunnews.com/topic/pemilu-2019']
 
     def parse(self, response):
@@ -20,7 +21,7 @@ class SkripsiSpiderSpider(scrapy.Spider):
             return response.css(query).get(default='').strip()
 
         content = response.xpath(".//div[@class='side-article txt-article']/p/text()").extract()
-
+        items['url'] = response.url,
         items['title'] = extract_with_css('#arttitle::text'),
         items['author'] = extract_with_css('#penulis::text'),
         items['time'] = extract_with_css('time.grey::text'),

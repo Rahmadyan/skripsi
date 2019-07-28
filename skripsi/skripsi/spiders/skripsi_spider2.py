@@ -1,5 +1,7 @@
 import scrapy
 from ..items import SkripsiItem
+from ..spiders.tanggalan import convert_tribun
+import datetime
 
 class SkripsiSpiderSpider(scrapy.Spider):
     name = 'skripsi2'
@@ -21,10 +23,15 @@ class SkripsiSpiderSpider(scrapy.Spider):
             return response.css(query).get(default='').strip()
 
         content = response.xpath(".//div[@class='side-article txt-article']/p/text()").extract()
+        x = response.css('time.grey::text').extract()
+        a = convert_tribun(x)
+
         items['url'] = response.url,
         items['title'] = extract_with_css('#arttitle::text'),
         items['author'] = extract_with_css('#penulis::text'),
-        items['time'] = extract_with_css('time.grey::text'),
+        # items['time'] = extract_with_css('time.grey::text'),
+        items['time'] = a,
+        items['crawl_time'] = datetime.datetime.now(),
         items['imagelink'] = extract_with_css('div.imgfull_div img::attr(src)'),
         items['content'] = ''.join(content),
 

@@ -2,6 +2,7 @@ from datetime import datetime
 import re
 
 def convert(t):
+
     t = t.lower()
     t = t.rsplit(' ')[0:6]
     t = [re.sub(r"[-()\"#/@;<>{}'`+=~|.!?,]", "", file) for file in t]

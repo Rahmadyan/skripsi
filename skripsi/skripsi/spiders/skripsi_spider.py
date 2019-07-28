@@ -1,8 +1,10 @@
 import scrapy
 import datetime
 from ..items import SkripsiItem
-import sys
-sys.path.insert(0, '../metode')
+# import sys
+# sys.path.insert(0, '../metode/tanggalan')
+from ..spiders.tanggalan import convert
+
 # from test import lakukan_perhitungan
 #
 # from scrapy import signals
@@ -31,12 +33,13 @@ class SkripsiSpiderSpider(scrapy.Spider):
             return response.css(query).get(default='').strip()
 
         content = response.xpath(".//div[@class='vidy-embed']/descendant::text()").extract()
-        time = response.css('time::text').extract()
+        x = response.css('time::text').extract()
+        a = convert(x)
         items['url'] = response.url,
         items['title'] = extract_with_css('h1::text'),
         items['author'] = extract_with_css('.author a::text'),
         # items['time'] = extract_with_css('time::text'),
-        items['time'] = ''.join(time),
+        items['time'] = a,
         items['crawl_time'] = datetime.datetime.now(),
         items['imagelink'] = extract_with_css('.article img::attr(src)'),
         items['content'] = ''.join(content),

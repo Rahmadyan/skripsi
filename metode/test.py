@@ -126,6 +126,6 @@ def lakukan_perhitungan():
     mycursor.executemany(sql, data)
     mydb.commit()
     mycursor.close()
-# print (lakukan_perhitungan())
+print (lakukan_perhitungan())
 
 

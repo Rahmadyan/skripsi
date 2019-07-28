@@ -103,7 +103,7 @@ def results(a):
     results = sorted(myresult, key=lambda x: hasil.index(x[0]))
 
     mycursor.execute("TRUNCATE TABLE show_data")
-    sql = "INSERT INTO show_data (id, title, author, time, imagelink, content) VALUES (%s, %s, %s, %s, %s, %s)"
+    sql = "INSERT INTO show_data (id, url, title, author, time, crawl_time, imagelink, content) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     mycursor.executemany(sql, results)
     mydb.commit()
 

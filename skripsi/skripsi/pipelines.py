@@ -6,17 +6,23 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 import mysql.connector
-from test import lakukan_perhitungan
+# import sys
+# sys.path.insert(0, '../metode')
+# from test import lakukan_perhitungan
+
+# from scrapy import signals
+# from scrapy.xlib.pydispatch import dispatcher
 
 class SkripsiPipeline(object):
 
     def __init__(self):
         self.create_connection()
+        # dispatcher.connect(self.close_spider, signals.close_spider)
         # self.create_table()
 
     def create_connection(self):
         self.conn = mysql.connector.connect(
-            host = 'localhost',
+            host = '127.0.0.1',
             password = '',
             user = 'root',
             database = 'news'
@@ -49,9 +55,8 @@ class SkripsiPipeline(object):
             item['content'][0]
         ))
         self.conn.commit()
-
-    def close_spider(self, spider):
-        lakukan_perhitungan()
-
+    #
+    # def close_spider(self, spider):
+    #     lakukan_perhitungan()
 
 

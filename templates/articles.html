@@ -12,9 +12,9 @@
             <img src="{{article.imagelink}}" width="180" height="140" class="mr-3" alt="...">
           <div class="media-body">
               <small>{{article.time}}</small>
-            <h5 class="mt-0">{{article.title}}</h5>
+            <a href="article/{{article.id}}"><h5 class="mt-0">{{article.title}}</h5></a>
             <p>{{ article.content | truncate(140) | safe}}</p>
-            <a href="article/{{article.id}}" class="stretched-link"></a>
+              <a href="{{article.url}}">Kunjungi Situs</a>
           </div>
         </div>
         <br>

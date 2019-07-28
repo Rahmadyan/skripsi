@@ -1,4 +1,5 @@
 import scrapy
+import datetime
 from ..items import SkripsiItem
 
 class SkripsiSpider3(scrapy.Spider):
@@ -23,10 +24,13 @@ class SkripsiSpider3(scrapy.Spider):
         def extract_with_css(query):
             return response.css(query).get(default='').strip()
         content = response.xpath(".//div[@class='itp_bodycontent detail_text']/text()").extract()
+        # time = response.css("jdl .date::text").extract()
         items['url'] = response.url,
         items['title']= extract_with_css('h1::text'),
         items['author'] = extract_with_css('.author::text'),
         items['time']= extract_with_css('.jdl .date::text'),
+        # items['time']=time,
+        items['crawl_time'] = datetime.datetime.now(),
         items['imagelink']= extract_with_css('.pic_artikel img::attr(src)'),
         if response.xpath(".//div[@class='itp_bodycontent detail_text']/text()"):
             items['content']= ''.join(content),

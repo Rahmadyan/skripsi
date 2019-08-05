@@ -23,7 +23,7 @@ app.config['MYSQL_DB'] = 'news'
 #seting ouputdata dari database ke dictionary
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-UPLOAD_FOLDER = 'uploads/img/full'
+UPLOAD_FOLDER = 'static/img/full/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -256,7 +256,7 @@ def edit_article(id):
         content = request.form['content']
         cur = mysql.connection.cursor()
         # cur.execute("INSERT INTO news_tb(title, imagelink, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
-        cur.execute("UPDATE news_tb SET title=%s, imagelink=%s, content=%s WHERE id=%s",(title, filename, content, id))
+        cur.execute("UPDATE news_tb SET title=%s, images=%s, content=%s WHERE id=%s",(title, filename, content, id))
         mysql.connection.commit()
 
         cur.close()

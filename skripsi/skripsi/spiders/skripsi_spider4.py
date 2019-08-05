@@ -33,7 +33,7 @@ class SkripsiSpider3(scrapy.Spider):
         # items['time']= extract_with_css('.jdl .date::text'),
         items['time']=a,
         items['crawl_time'] = datetime.datetime.now(),
-        items['imagelink']= extract_with_css('.pic_artikel img::attr(src)'),
+        items['image_urls']= extract_with_css('.pic_artikel img::attr(src)'),
         if response.xpath(".//div[@class='itp_bodycontent detail_text']/text()"):
             items['content']= ''.join(content),
         yield items

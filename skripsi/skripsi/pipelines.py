@@ -45,13 +45,16 @@ class SkripsiPipeline(object):
         return item
 
     def store_db(self,item):
-        self.curr.execute("INSERT INTO news_tb (url, title, author, time, crawl_time, imagelink, content) values (%s,%s,%s,%s,%s,%s,%s)",(
+        path = item['images'][0]['path'].split('/')[1]
+        self.curr.execute("INSERT INTO news_tb (url, title, author, time, crawl_time, image_urls, images, content) values (%s,%s,%s,%s,%s,%s,%s,%s)",(
             item['url'][0],
             item['title'][0],
             item['author'][0],
             item['time'][0],
             item['crawl_time'][0],
-            item['imagelink'][0],
+            item['image_urls'][0],
+            path,
+            # item['images'][0]['path'],
             item['content'][0]
         ))
         self.conn.commit()

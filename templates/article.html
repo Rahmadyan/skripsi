@@ -17,7 +17,7 @@
             <h2 class="blog-post-title">{{article.title}}</h2>
                 <p class="blog-post-meta">{{article.time}} by {{article.author}}</p>
             <hr>
-            <img src="{{article.imagelink}}" class="img-fluid" alt="Responsive image">
+            <img src="{{article.image_urls}}" class="img-fluid" alt="Responsive image">
             <hr>
             <p>{{article.content | safe}}</p>
         </div>
@@ -36,7 +36,7 @@
         <div class="p-4 mb-3 bg-light rounded">
             <small>{{article.time}}</small>
             <a href="/article/{{article.id}}" class=""><h6 class="mt-0">{{article.title}}</h6></a>
-            <img src="{{article.imagelink}}" width="200" height="130" class="mr-3" alt="...">
+            <img src="{{article.image_urls}}" width="200" height="130" class="mr-3" alt="...">
             <!--<p>{{ article.content | truncate(140) | safe}}</p>-->
             <a href="{{article.url}}">Kunjungi Situs</a>
         </div>

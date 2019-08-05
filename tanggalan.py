@@ -57,5 +57,5 @@ def convert(t):
     hari_bulan = ' '.join(hari_bulan)
     time = datetime.strptime(hari_bulan, "%A %d %B %Y %H:%M")
     return time
-# a = "rabu, 22 desember 2019 - 15:04 WIB"
-# print(convert(a))
+a = "rabu, 22 desember 2019 - 15:04 WIB"
+print(convert(a))

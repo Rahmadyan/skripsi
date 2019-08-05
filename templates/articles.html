@@ -2,14 +2,19 @@
 
 {% block body %}
 <hr>
-    <ul class="list-group">
+<div class="input-group mb-3">
+    <input type="text" class="form-control" id="myInput" onkeyup="myFunction2()" placeholder="Search for names..">
+</div>
+
+    <ul id="myUL" class="list-group">
     {% for article in articles %}
+        <li style="list-style-type: none;">
         <!--<li class="list-group-item">-->
             <!--<a href="article/{{article.id}}"> {{article.title}}</a></li>-->
         <!--</ul>-->
         <div class="media position-relative">
           <!--<img src="{{article.imagelink}}" width="180" height="140" class="mr-3" alt="...">-->
-            <img src="{{article.imagelink}}" width="180" height="140" class="mr-3" alt="...">
+            <img src="{{article.image_urls}}" width="180" height="140" class="mr-3" alt="...">
           <div class="media-body">
               <small>{{article.time}}</small>
             <a href="article/{{article.id}}"><h5 class="mt-0">{{article.title}}</h5></a>
@@ -18,6 +23,7 @@
           </div>
         </div>
         <br>
+        </li>
     {%endfor%}
     </ul>
 {% endblock %}

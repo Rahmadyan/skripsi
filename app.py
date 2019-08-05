@@ -23,7 +23,7 @@ app.config['MYSQL_DB'] = 'news'
 #seting ouputdata dari database ke dictionary
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-UPLOAD_FOLDER = 'uploads/img'
+UPLOAD_FOLDER = 'uploads/img/full'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -47,10 +47,10 @@ def articles():
     cur = mysql.connection.cursor()
 
     # Get articles
-    result = cur.execute("SELECT * FROM news_tb")
+    result = cur.execute("SELECT * FROM news_tb ORDER BY time DESC")
 
     articles = cur.fetchall()
-
+    print(articles)
     if result > 0:
         return render_template('articles.html', articles=articles)
     else:
@@ -213,7 +213,7 @@ def add_article():
         title = form.title.data
         content=form.content.data
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO news_tb(title, imagelink, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
+        cur.execute("INSERT INTO news_tb(title, images, content, author) VALUES(%s,%s,%s,%s)",(title, filename, content, session['username']))
         mysql.connection.commit()
         # lakukan_perhitungan()
         cur.close()

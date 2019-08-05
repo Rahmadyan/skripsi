@@ -16,7 +16,8 @@ class SkripsiItem(scrapy.Item):
     author = scrapy.Field()
     time = scrapy.Field()
     crawl_time = scrapy.Field()
-    imagelink = scrapy.Field()
+    image_urls = scrapy.Field()
+    images = scrapy.Field()
     content = scrapy.Field()
 
 

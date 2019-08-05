@@ -81,8 +81,9 @@ CONCURRENT_REQUESTS = 1
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'skripsi.pipelines.SkripsiPipeline': 300,
+    'scrapy.pipelines.images.ImagesPipeline':1
 }
-
+IMAGES_STORE = 'C:/Users/Rahmadyan/PycharmProjects/Skripsi/uploads/img'
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

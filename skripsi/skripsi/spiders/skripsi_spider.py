@@ -41,7 +41,7 @@ class SkripsiSpiderSpider(scrapy.Spider):
         # items['time'] = extract_with_css('time::text'),
         items['time'] = a,
         items['crawl_time'] = datetime.datetime.now(),
-        items['imagelink'] = extract_with_css('.article img::attr(src)'),
+        items['image_urls'] = extract_with_css('.article img::attr(src)'),
         items['content'] = ''.join(content),
 
         yield items
